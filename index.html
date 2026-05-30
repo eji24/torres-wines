@@ -48,18 +48,20 @@
 
 <!-- HERO -->
 <header class="hero" id="top">
-  <div class="hero-inner">
-    <div class="hero-eyebrow reveal">Fulton Street · Brooklyn</div>
-    <h1 class="reveal">The Neighborhood's<br><em>Finest</em> Selection</h1>
-    <p class="hero-sub reveal">A neighborhood wine &amp; spirits shop on Fulton Street — premium bottles, honest prices, and staff who know the shelves inside out.</p>
-    <div class="hero-meta reveal">
-      <span>2672 Fulton Street, Brooklyn</span>
-      <span>Open 7 Days</span>
-      <span>Knowledgeable Staff</span>
+  <div class="hero-inner hero-split">
+    <div class="hero-text">
+      <div class="hero-eyebrow reveal">Fulton Street · Brooklyn</div>
+      <h1 class="reveal">The Neighborhood's<br><em>Finest</em> Selection</h1>
+      <p class="hero-sub reveal">A neighborhood wine &amp; spirits shop on Fulton Street — premium bottles, honest prices, and staff who know the shelves inside out.</p>
+      <div class="hero-status reveal" id="openStatus"><span class="dot"></span><span id="statusText">Checking hours…</span></div>
+      <div class="hero-btns reveal">
+        <a href="tel:+13476273045" class="btn-gold">📞 Call to Order</a>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=2672+Fulton+Street+Brooklyn+NY+11207" target="_blank" class="btn-ghost">Get Directions →</a>
+      </div>
     </div>
-    <div class="hero-btns reveal">
-      <a href="tel:+13476273045" class="btn-gold">📞 Call to Order</a>
-      <a href="https://www.google.com/maps/dir/?api=1&destination=2672+Fulton+Street+Brooklyn+NY+11207" target="_blank" class="btn-ghost">Get Directions →</a>
+    <div class="hero-photo reveal">
+      <img src="img/storefront.jpg" alt="Torres Wines & Spirits storefront on Fulton Street, Brooklyn">
+      <div class="hero-photo-tag">2672 Fulton Street</div>
     </div>
   </div>
 </header>
@@ -67,8 +69,8 @@
 <!-- TRUST STRIP -->
 <div class="trust">
   <div class="trust-inner">
-    <div class="trust-item reveal"><div class="n">5.0</div><div class="t">Neighborhood Rated</div></div>
-    <div class="trust-item reveal"><div class="n">8+</div><div class="t">Premium Categories</div></div>
+    <div class="trust-item reveal"><div class="n">5.0</div><div class="t">Google Rated</div></div>
+    <div class="trust-item reveal"><div class="n">200+</div><div class="t">Labels in Stock</div></div>
     <div class="trust-item reveal"><div class="n">7</div><div class="t">Days a Week</div></div>
     <div class="trust-item reveal"><div class="n">Local</div><div class="t">Brooklyn Owned</div></div>
   </div>
@@ -197,10 +199,10 @@
     <div class="label reveal">What Neighbors Say</div>
     <h2 class="h2 reveal">Trusted on Fulton Street</h2>
     <div class="rev-grid">
-      <div class="rev reveal"><div class="stars">★★★★★</div><p>What a great family-owned small business! Will definitely recommend to anybody in the area.</p><div class="by">Verified Customer</div></div>
-      <div class="rev reveal"><div class="stars">★★★★★</div><p>Wonderful store! Great workers, very knowledgeable about their products.</p><div class="by">Verified Customer</div></div>
-      <div class="rev reveal"><div class="stars">★★★★★</div><p>The place was beautiful and they treated me kindly. I even got little treats.</p><div class="by">Verified Customer</div></div>
-      <div class="rev reveal"><div class="stars">★★★★★</div><p>Great customer service — exactly what a neighborhood shop should be.</p><div class="by">Verified Customer</div></div>
+      <div class="rev reveal"><div class="stars">★★★★★</div><p>What a great family-owned small business! Will definitely recommend to anybody in the area.</p><div class="by">via Google Reviews</div></div>
+      <div class="rev reveal"><div class="stars">★★★★★</div><p>Wonderful store! Great workers, very knowledgeable about their products.</p><div class="by">via Google Reviews</div></div>
+      <div class="rev reveal"><div class="stars">★★★★★</div><p>The place was beautiful and they treated me kindly. I even got little treats.</p><div class="by">via Google Reviews</div></div>
+      <div class="rev reveal"><div class="stars">★★★★★</div><p>Great customer service — exactly what a neighborhood shop should be.</p><div class="by">via Google Reviews</div></div>
     </div>
   </div>
 </section>
@@ -294,6 +296,26 @@
 // scroll reveal
 const obs=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}})},{threshold:0.12});
 document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%4*0.07)+'s';obs.observe(el)});
+// live open/closed status — Sun-Wed 12-20, Thu-Sat 12-23
+(function(){
+  const now=new Date();
+  const day=now.getDay(); // 0=Sun..6=Sat
+  const h=now.getHours()+now.getMinutes()/60;
+  const close=(day>=4)?23:20; // Thu(4),Fri(5),Sat(6) close 23; else 20
+  const open=12;
+  const el=document.getElementById('openStatus');
+  const txt=document.getElementById('statusText');
+  if(!el)return;
+  if(h>=open && h<close){
+    el.classList.add('is-open');
+    const ch=Math.floor(close); const cm=Math.round((close-ch)*60);
+    let label=(ch>12?ch-12:ch)+(cm?(':'+String(cm).padStart(2,'0')):'')+(ch>=12?'pm':'am');
+    txt.textContent='Open Now · Closes '+label;
+  } else {
+    el.classList.add('is-closed');
+    txt.textContent='Closed Now · Opens 12pm';
+  }
+})();
 // close mobile menu on link tap
 document.querySelectorAll('#navLinks a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open')));
 </script>
